@@ -14,7 +14,8 @@ def create_interaction(device1: Device, device2: Device, interaction: Interactio
         new_device2 = {key + "2": value for key, value in device2.items()}
 
         query = """
-        merge(d1{device_id: $device_id,
+        merge(d1: Device{device_id: $id,
+            name: $name,
             brand: $brand,
             model: $model,
             os: $os,
@@ -23,7 +24,8 @@ def create_interaction(device1: Device, device2: Device, interaction: Interactio
             altitude_meters: $altitude_meters, 
             accuracy_meters: $accuracy_meters
         })
-        merge(d2{device_id2: $device_id,
+        merge(d2: Device{device_id: $id2,
+            name: $name2,
             brand: $brand2,
             model: $model2,
             os: $os2,
