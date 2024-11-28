@@ -5,7 +5,7 @@ from app.routes.phone_routes import phone_blueprint
 
 app = Flask(__name__)
 app.register_blueprint(phone_blueprint, url_prefix="/api/phone_tracker")
-app.register_blueprint(device_blueprint, url_prefix="/api/device")
+app.register_blueprint(device_blueprint, url_prefix="/api/device/connection")
 
 if __name__ == "__main__":
     app.run()

@@ -14,12 +14,12 @@ def get_device_bluetooth_connected_path() -> Maybe:
         WITH path, length(path) as pathLength
         ORDER BY pathLength DESC
         LIMIT 1
-        RETURN path
+        RETURN path, pathLength
         """
         return Maybe.from_optional(session.run(query).data())
 
 
-def get_strong_signal_connected_path(min_strength=-30) -> Maybe:
+def get_strong_signal_connected_path(min_strength=-60) -> Maybe:
     with driver.session() as session:
         query = """
         MATCH (start:Device)
@@ -30,8 +30,30 @@ def get_strong_signal_connected_path(min_strength=-30) -> Maybe:
         WITH path, length(path) as pathLength
         ORDER BY pathLength DESC
         LIMIT 1
-        RETURN path
+        RETURN path, pathLength
         """
         params = {"min_strength": min_strength}
         return Maybe.from_optional(session.run(query, params).data())
 
+
+def get_num_of_connected_to_device(device_id: str):
+    with driver.session() as session:
+        query = """
+            MATCH (d: Device{device_id: $device_id) <-[:CONNECTED] - (d2:Device) 
+            return count(d2) as connected_devices
+        """
+        params = {"device_id": device_id}
+        return  Maybe.from_optional(session.run(query, params).data())
+
+
+def check_if_connected(device1_id: str, device2_id: str):
+    with driver.session() as session:
+        query = """
+            MATCH (d: Device{device_id: $id1) <-[r:CONNECTED] - (d2:Device{device_id: $id2) 
+            return d, r, d2
+        """
+        params = {"id1": device1_id, "id2": device2_id}
+        res = session.run(query, params).data()
+        if res:
+            return res
+        return {"massage": "no connection"}

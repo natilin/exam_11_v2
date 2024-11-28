@@ -20,5 +20,5 @@ def create_new_interaction(data: dict):
 
 
 def is_self_call(data:dict):
-    pass
+    return data["interaction"]["from_device"] == data["interaction"]["to_device"]
 
