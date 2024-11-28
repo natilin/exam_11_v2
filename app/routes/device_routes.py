@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 
 from app.repositories.device_repository import get_device_bluetooth_connected_path, get_strong_signal_connected_path, \
-    get_num_of_connected_to_device, check_if_connected
+    get_num_of_connected_to_device, check_if_connected, get_most_recent_interaction
 
 device_blueprint = Blueprint("device", __name__)
 
@@ -23,7 +23,7 @@ def get_strong_connection():
         return str(e), 400
 
 
-@device_blueprint.route("/count/<device_id>", methods=["GET"])
+@device_blueprint.route("/count/<device_id>/", methods=["GET"])
 def get_count_connection(device_id):
     try:
         res = get_num_of_connected_to_device(device_id)
@@ -33,7 +33,7 @@ def get_count_connection(device_id):
 
 
 @device_blueprint.route("/check-connection", methods=["POST"])
-def get_count_connection():
+def check_connection():
     try:
         device_1 = request.json["device_1"]
         device_2 = request.json["device_2"]
@@ -44,9 +44,11 @@ def get_count_connection():
 
 
 @device_blueprint.route("/recent-interaction/<device_id>", methods=["GET"])
-def get_count_connection(device_id):
+def recent_connection(device_id):
     try:
-        res =
+        res = get_most_recent_interaction(device_id)
         return jsonify(res), 200
     except Exception as e:
         return str(e), 400
+
+
