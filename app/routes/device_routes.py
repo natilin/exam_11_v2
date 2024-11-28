@@ -47,7 +47,7 @@ def check_connection():
 def recent_connection(device_id):
     try:
         res = get_most_recent_interaction(device_id)
-        return jsonify(res), 200
+        return jsonify(res.value_or({})), 200
     except Exception as e:
         return str(e), 400
 

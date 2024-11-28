@@ -59,7 +59,7 @@ def check_if_connected(device1_id: str, device2_id: str):
         return {"massage": "no connection"}
 
 
-def get_most_recent_interaction(device_id: str):
+def get_most_recent_interaction(device_id: str) -> Maybe:
         with driver.session() as session:
             query = """
                 MATCH (d:Device {id: $device_id})-[rel:CONNECTED]->(d2:Device)
@@ -68,5 +68,5 @@ def get_most_recent_interaction(device_id: str):
                 LIMIT 1
             """
             params = {"device_id": device_id}
-            res = session.run(query, params).data()
-            return res
+            return  Maybe.from_optional(session.run(query, params).data())
+
