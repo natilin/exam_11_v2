@@ -3,7 +3,8 @@ from dataclasses import dataclass, asdict
 
 @dataclass
 class Device:
-    device_id: str
+    id: str
+    name: str
     brand: str
     model: str
     os: str
